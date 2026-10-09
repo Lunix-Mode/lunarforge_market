@@ -1,0 +1,8 @@
+<resources>
+    <string-array name="delivery_methods">
+        <item>Промокод</item>
+        <item>Автовыдача</item>
+        <item>Ручная выдача</item>
+        <item>Перевод на аккаунт</item>
+    </string-array>
+</resources>

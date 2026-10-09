@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <!-- Camera writes recorded video notes ("кружочки") here before upload. -->
+    <cache-path name="video_notes" path="." />
+</paths>

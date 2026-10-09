@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- DARK theme palette - used automatically when the phone/app is in dark mode. -->
+<resources>
+    <color name="c_bg">#0C1019</color> <!-- screen background -->
+    <color name="c_topbar">#111827</color> <!-- top bars -->
+    <color name="c_surface">#171C27</color> <!-- cards, bottom bar, panels -->
+    <color name="c_surface_alt">#1C2333</color> <!-- inputs, search, secondary buttons, received bubbles -->
+    <color name="c_strip">#1C2842</color> <!-- info strips, hints, bot messages -->
+    <color name="c_divider">#2A3242</color> <!-- dividers -->
+    <color name="c_outline">#2E3D5C</color> <!-- outlines -->
+    <color name="c_card_balance">#022452</color> <!-- wallet balance card -->
+    <color name="c_placeholder">#222A3A</color> <!-- photo placeholder -->
+    <color name="c_text">#FFFFFF</color> <!-- primary text -->
+    <color name="c_text_soft">#DBE4F2</color> <!-- body text -->
+    <color name="c_text_secondary">#8A95A5</color> <!-- secondary text -->
+    <color name="c_text_hint">#6B7685</color> <!-- hints -->
+    <color name="c_icon">#DBE4F2</color> <!-- icons -->
+    <color name="c_on_accent">#FFFFFF</color> <!-- text/icons on accent buttons & bubbles -->
+    <color name="c_warning">#FFD166</color> <!-- pending / attention -->
+    <color name="c_star">#FFD166</color> <!-- rating stars -->
+    <color name="c_success">#4ADE80</color> <!-- completed / income -->
+    <color name="c_danger">#FF6B6B</color> <!-- errors / cancel / spending -->
+    <color name="c_badge_warn_bg">#3A2E00</color> <!-- pending badge bg -->
+    <color name="c_badge_ok_bg">#0F3A1E</color> <!-- completed badge bg -->
+    <color name="c_badge_err_bg">#3A0F0F</color> <!-- cancelled badge bg -->
+    <color name="c_overlay">#CC0C1019</color> <!-- video-note recording overlay -->
+</resources>

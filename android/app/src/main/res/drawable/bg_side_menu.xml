@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- боковое меню выезжает справа: скругляем только левые углы (те, что смотрят в экран) -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@color/c_surface" />
+    <corners
+        android:bottomLeftRadius="24dp"
+        android:topLeftRadius="24dp" />
+</shape>

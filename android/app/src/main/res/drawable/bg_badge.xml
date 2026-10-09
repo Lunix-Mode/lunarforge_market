@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- красный кружок с числом непрочитанных на колокольчике -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="#FFE5484D" />
+    <corners android:radius="10dp" />
+</shape>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- LIGHT theme palette (default). Dark values live in values-night/colors.xml. -->
+<resources>
+    <color name="c_bg">#F3F5F9</color> <!-- screen background -->
+    <color name="c_topbar">#FFFFFF</color> <!-- top bars -->
+    <color name="c_surface">#FFFFFF</color> <!-- cards, bottom bar, panels -->
+    <color name="c_surface_alt">#EDF0F6</color> <!-- inputs, search, secondary buttons, received bubbles -->
+    <color name="c_strip">#E8EFFF</color> <!-- info strips, hints, bot messages -->
+    <color name="c_divider">#DDE2EC</color> <!-- dividers -->
+    <color name="c_outline">#D3D9E6</color> <!-- outlines -->
+    <color name="c_card_balance">#E3ECFF</color> <!-- wallet balance card -->
+    <color name="c_placeholder">#E2E6EE</color> <!-- photo placeholder -->
+    <color name="c_text">#111827</color> <!-- primary text -->
+    <color name="c_text_soft">#374151</color> <!-- body text -->
+    <color name="c_text_secondary">#6B7280</color> <!-- secondary text -->
+    <color name="c_text_hint">#9CA3AF</color> <!-- hints -->
+    <color name="c_icon">#374151</color> <!-- icons -->
+    <color name="c_on_accent">#FFFFFF</color> <!-- text/icons on accent buttons & bubbles -->
+    <color name="c_warning">#B45309</color> <!-- pending / attention -->
+    <color name="c_star">#D97706</color> <!-- rating stars -->
+    <color name="c_success">#15803D</color> <!-- completed / income -->
+    <color name="c_danger">#DC2626</color> <!-- errors / cancel / spending -->
+    <color name="c_badge_warn_bg">#FEF3C7</color> <!-- pending badge bg -->
+    <color name="c_badge_ok_bg">#DCFCE7</color> <!-- completed badge bg -->
+    <color name="c_badge_err_bg">#FEE2E2</color> <!-- cancelled badge bg -->
+    <color name="c_overlay">#E6F3F5F9</color> <!-- video-note recording overlay -->
+
+    <!-- legacy aliases -->
+</resources>

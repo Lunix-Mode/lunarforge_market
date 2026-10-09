@@ -1,0 +1,6 @@
+<resources>
+    <!-- Custom theme attribute so layouts can reference the current accent color via
+         ?attr/appAccent instead of a hardcoded hex, letting ThemeManager swap it at
+         runtime by switching which Theme.LunarForgeMarket.* style is applied. -->
+    <attr name="appAccent" format="color" />
+</resources>

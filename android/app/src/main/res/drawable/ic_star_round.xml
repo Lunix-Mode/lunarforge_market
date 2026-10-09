@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Star with rounded tips (round-joined stroke). Colour comes from the ImageView tint:
+     filled = @color/c_star, empty = @color/c_divider. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:strokeColor="#FFFFFFFF"
+        android:strokeWidth="2.2"
+        android:strokeLineJoin="round"
+        android:pathData="M12.00,3.40 L14.41,9.28 L20.75,9.76 L15.90,13.87 L17.41,20.04 L12.00,16.70 L6.59,20.04 L8.10,13.87 L3.25,9.76 L9.59,9.28 Z" />
+</vector>

@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Lunar Store</string>
+    <string name="search_hint">Поиск</string>
+    <string name="search_icon_description">Поиск</string>
+    <string name="notifications_button_description">Уведомления</string>
+    <string name="menu_button_description">Меню</string>
+    <string name="home_button_description">Домой</string>
+    <string name="chat_button_description">Чат</string>
+    <string name="profile_button_description">Профиль</string>
+    <string name="avatar_description">Аватар</string>
+    <string name="back_button_description">Назад</string>
+    <string name="close_menu_description">Закрыть меню</string>
+</resources>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Фон диалоговых окон: большие скруглённые углы и отступы от краёв экрана. -->
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+    android:insetLeft="20dp"
+    android:insetRight="20dp"
+    android:insetTop="32dp"
+    android:insetBottom="32dp">
+    <shape>
+        <solid android:color="@color/c_surface" />
+        <corners android:radius="24dp" />
+    </shape>
+</inset>
