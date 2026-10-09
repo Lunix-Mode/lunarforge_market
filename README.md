@@ -3,24 +3,83 @@
 Маркетплейс игровых товаров и услуг. Android (Java) + Spring Boot (Java) + PostgreSQL.
 Реальных платежей нет — пополнение/вывод работают как заглушки.
 
-## Запуск
-1. **База**: PostgreSQL, база `lunarforge_market`, логин/пароль `postgres`/`postgres`
-   (или `cd backend && docker compose up -d`).
-2. **Сервер** (нужна **Java 25**): открыть `backend` в IntelliJ IDEA как Maven-проект.
-   File → Project Structure → SDK → Download JDK → 25 (Eclipse Temurin). Запустить `MarketApplication`, порт 8080.
-   Spring Boot 3.5.16. Обработка аннотаций Lombok включена в `pom.xml` (`<proc>full</proc>`) - на JDK 23+
-   без этого Lombok молча не работает.
-3. **Сеть**: телефон и ПК в одной Wi-Fi сети. Адрес сервера - `ApiClient.BASE_URL`
-   (сейчас `http://192.168.50.32:8080/`). Один раз открыть порт (PowerShell **от администратора**):
-   `New-NetFirewallRule -DisplayName "LunarForge 8080" -Direction Inbound -Protocol TCP -LocalPort 8080 -Action Allow`
-   Проверка с телефона в браузере: `http://192.168.50.32:8080/api/games`. Если не открывается -
-   выключите VPN на телефоне. Если роутер сменил IP компьютера (`ipconfig`) - поменяйте адрес в `ApiClient.java`
-   или закрепите IP за ПК в настройках роутера.
-4. **Приложение**: открыть `android` в Android Studio → Gradle Sync → Run.
-   Gradle 9.5.1, AGP 9.3.0, compileSdk 37, **targetSdk 36** - намеренно: в Android 17 при targetSdk 37
-   нужно отдельное разрешение на локальную сеть, иначе приложение не увидит сервер на компьютере.
-   Библиотеки - последние стабильные: AppCompat 1.8.0, Material 1.14.0, CameraX 1.6.2, Retrofit 3.0.0,
-   OkHttp 5.5.0, Glide 5.0.9.
+## Установка и запуск с нуля
+
+Что понадобится на компьютере (Windows):
+- **PostgreSQL 18** - база данных
+- **IntelliJ IDEA** (Community хватает) + **JDK 25** (Eclipse Temurin) - для сервера
+- **Android Studio** - для приложения
+- телефон на Android 7.0+ (minSdk 24) в той же Wi-Fi сети, что и компьютер
+
+### 1. PostgreSQL: установка
+Скачать установщик PostgreSQL 18 для Windows (сайт postgresql.org → Download → Windows, установщик EDB) и при установке:
+- **Компоненты**: PostgreSQL Server, pgAdmin 4, Command Line Tools - оставить галочки. Stack Builder не нужен (галку можно снять).
+- **Папка данных** - по умолчанию.
+- **Пароль суперпользователя `postgres`**: ввести **`postgres`** (именно такой прописан в `application.properties`).
+  Если поставили другой - поменяйте `spring.datasource.password` в `backend/src/main/resources/application.properties`.
+- **Порт**: **5432** (по умолчанию).
+- **Locale**: Default locale (или Russian, Russia) - не важно, кодировка базы всё равно UTF-8.
+- В конце снять галку "Launch Stack Builder" и нажать Finish.
+
+### 2. PostgreSQL: создать базу
+Таблицы создавать руками **не нужно** - их делает сам сервер при первом запуске (`spring.jpa.hibernate.ddl-auto=update`).
+Нужно только создать пустую базу **`lunarforge_market`**. Любой способ:
+- **pgAdmin 4**: Servers → PostgreSQL 18 (ввести пароль `postgres`) → правой кнопкой по Databases →
+  Create → Database... → Database: `lunarforge_market`, Owner: `postgres` → Save.
+- **или SQL Shell (psql)** из меню Пуск: на все вопросы Enter, пароль `postgres`, затем:
+  ```sql
+  CREATE DATABASE lunarforge_market;
+  ```
+- **или Docker** (если стоит Docker Desktop): `cd backend` → `docker compose up -d` - поднимет PostgreSQL сразу с базой.
+
+**Начать с чистой базы** (удалить все товары, заказы, чаты): остановить сервер, затем в pgAdmin (Query Tool на базе `postgres`) или psql:
+```sql
+DROP DATABASE lunarforge_market WITH (FORCE);
+CREATE DATABASE lunarforge_market;
+```
+и удалить папку `backend/uploads` (там лежат загруженные фото/видео/голосовые). При следующем запуске сервер
+заново создаст таблицы, игры с подкатегориями, админа (он получит id 1) и тестовые аккаунты.
+
+### 3. Сервер (Spring Boot)
+1. IntelliJ IDEA → Open → выбрать папку **`backend`** (там `pom.xml`) → Trust Project. Откроется как Maven-проект.
+2. **JDK 25**: File → Project Structure → Project → SDK → Add SDK → Download JDK → Version **25**,
+   Vendor **Eclipse Temurin** → Download. Language level - "SDK default".
+3. Справа панель **Maven** → кнопка Reload (круглые стрелки), чтобы скачались библиотеки.
+4. Запустить `src/main/java/com/lunarforge/market/MarketApplication.java` (зелёный треугольник у `main`).
+   В логе должно появиться `Tomcat started on port 8080` и `Started MarketApplication`.
+5. Проверка на компьютере: открыть в браузере `http://localhost:8080/api/games` - должен прийти JSON со списком игр.
+
+Версии: Spring Boot 3.5.16, Java 25. Обработка аннотаций Lombok включена в `pom.xml` (`<proc>full</proc>`) -
+на JDK 23+ без этого Lombok молча не работает. Файлы пользователей сохраняются в `backend/uploads`.
+
+Если сервер не стартует:
+- `password authentication failed for user "postgres"` - пароль в `application.properties` не совпадает с паролем из установки.
+- `database "lunarforge_market" does not exist` - не создана база (шаг 2).
+- `Connection refused` на 5432 - не запущен PostgreSQL (Пуск → Службы → postgresql-x64-18 → Запустить).
+- `Port 8080 was already in use` - сервер уже запущен в другом окне, остановите старый.
+
+### 4. Сеть между телефоном и компьютером
+- Телефон и ПК в одной Wi-Fi сети. Узнать IP компьютера: `ipconfig` → "IPv4-адрес" (например `192.168.50.32`).
+- Этот адрес должен стоять в `android/app/src/main/java/com/lunarforge/market/api/ApiClient.java`:
+  `BASE_URL = "http://192.168.50.32:8080/"` - поменяйте на свой IP, если он другой.
+- Один раз открыть порт в брандмауэре (PowerShell **от администратора**, правило сохраняется навсегда):
+  `New-NetFirewallRule -DisplayName "LunarForge 8080" -Direction Inbound -Protocol TCP -LocalPort 8080 -Action Allow`
+- Проверка с телефона в браузере: `http://<IP компьютера>:8080/api/games`. Если не открывается -
+  **выключите VPN на телефоне**. Чтобы IP компьютера не менялся - закрепите его за ПК в настройках роутера.
+
+### 5. Приложение (Android)
+1. Android Studio → Open → выбрать папку **`android`** → дождаться Gradle Sync (первый раз долго - качаются библиотеки).
+   Если спросит про Gradle JDK - выбрать встроенный JetBrains Runtime (JBR 21). Предложения "обновить AGP/Gradle" можно пропускать.
+2. На телефоне включить режим разработчика и **отладку по USB** (или по Wi-Fi), подключить телефон.
+3. Выбрать телефон сверху и нажать **Run ▶**. После изменений кода - Build → Rebuild Project.
+
+Версии: Gradle 9.8.0, AGP 9.3.0, compileSdk 37, **targetSdk 36** - намеренно: в Android 17 при targetSdk 37
+нужно отдельное разрешение на локальную сеть, иначе приложение не увидит сервер на компьютере.
+Библиотеки - последние стабильные: AppCompat 1.8.0, Material 1.14.0, CameraX 1.6.2, Retrofit 3.0.0,
+OkHttp 5.5.0, Glide 5.0.9.
+
+### 6. Порядок запуска каждый раз
+PostgreSQL (обычно запускается сам вместе с Windows) → сервер в IDEA → приложение на телефоне.
 
 Тестовые аккаунты создаются сами при первом запуске сервера:
 **админ: почта `lunixmode.dev@gmail.com`, пароль `admin`** (ник Lunix, @lunix, в профиле значок «👑 Создатель»). В меню ☰ появится «Доход площадки». Пароль задаётся в `DataSeeder.java` - перед реальным запуском поменяйте на надёжный.
@@ -39,7 +98,7 @@
   Продавец может скрыть товар с витрины и вернуть обратно.
   Продавец сразу видит цену для покупателя.
 - **Фиксированная комиссия 5%** (`ListingService.COMMISSION_RATE`) — покупатель везде видит и платит цену с комиссией.
-- **Покупка (эскроу)**: выбор количества → оплата → деньги заморожены → приложение открывает чат с продавцом,
+- **Безопасная сделка**: выбор количества → оплата → деньги заморожены → приложение открывает чат с продавцом,
   Lunar Bot пишет «Куплен заказ #N … × количество … ожидает выполнения». Покупатель подтверждает получение →
   деньги уходят продавцу, но **48 часов заморожены** (`OrderService.WITHDRAWAL_HOLD_HOURS`), у каждого заказа свой таймер.
   **Отменить заказ может только продавец** (деньги возвращаются покупателю, товар - в наличие).
@@ -98,9 +157,11 @@
   осень оранжевые), при этом три месяца внутри сезона разные. Контраст буквы проверен.
 
 ## Код
-Важные места в коде прокомментированы на русском (деньги, блокировки, чат и запись, безопасность).
+Весь код подробно прокомментирован на русском: что делает каждый класс и метод и почему именно так (деньги, блокировки, чат и запись, подгрузка порциями, безопасность).
 
 ## Надёжность
+- **Подгрузка порциями**: товары, заказы, операции и история чата грузятся частями - сразу видимая часть экрана
+  плюс ~50% запаса; когда до конца остаётся полэкрана, тихо подгружается следующая порция. Листается быстро даже при тысячах записей.
 - **Жизненный цикл**: всё, что экран запускает (опрос чата и колокольчика, таймеры, камера, диктофон, плееры),
   останавливается в `onPause`/`onDestroy`. Ответ сервера, пришедший после закрытия экрана, игнорируется -
   без падений и лишней работы. Статических ссылок на экраны нет (утечек памяти нет); картинки кэширует Glide,
