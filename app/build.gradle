@@ -1,0 +1,73 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace = 'com.lunarforge.market'
+    compileSdk = 37
+
+    defaultConfig {
+        applicationId = "com.lunarforge.market"
+        minSdk = 24
+        // 36, а не 37: в Android 17 приложениям с targetSdk 37 нужно отдельное разрешение на локальную сеть,
+        // без него не достучаться до сервера на компе по 192.168.x.x. на One UI 9 с 36 всё работает
+        targetSdk = 36
+        versionCode = 1
+        versionName = "0.1-beta"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled = false
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    buildFeatures {
+        viewBinding = false
+    }
+
+    packaging {
+        jniLibs {
+            // либы камеры приходят уже без отладочных символов, пусть градл их не трогает
+            // (иначе каждый раз предупреждение "Unable to strip the following libraries")
+            keepDebugSymbols += ['**/libimage_processing_util_jni.so', '**/libsurface_util_jni.so']
+        }
+    }
+}
+
+dependencies {
+    // все версии - последние стабильные на октябрь 2026
+    implementation 'androidx.appcompat:appcompat:1.8.0'
+    implementation 'androidx.activity:activity:1.13.0'
+    implementation 'com.google.android.material:material:1.14.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.2'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.4.0'
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+
+    // камера для кружков. нативные либы выровнены под 16кб страницы (android 15+)
+    def camerax_version = '1.6.2'
+    implementation "androidx.camera:camera-core:$camerax_version"
+    implementation "androidx.camera:camera-camera2:$camerax_version"
+    implementation "androidx.camera:camera-lifecycle:$camerax_version"
+    implementation "androidx.camera:camera-video:$camerax_version"
+    implementation "androidx.camera:camera-view:$camerax_version"
+
+    // retrofit 3 собран под okhttp 4.12, okhttp 5 с ним совместим - явно ставим свежий
+    implementation 'com.squareup.retrofit2:retrofit:3.0.0'
+    implementation 'com.squareup.retrofit2:converter-gson:3.0.0'
+    implementation 'com.squareup.okhttp3:okhttp:5.5.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:5.5.0'
+
+    implementation 'com.github.bumptech.glide:glide:5.0.9'
+}
+
+// если в коде остался устаревший вызов - сборка покажет точный файл и строку вместо безликого "Note: ... deprecated API"
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs.add("-Xlint:deprecation")
+}
